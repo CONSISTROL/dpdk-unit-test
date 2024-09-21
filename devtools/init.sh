@@ -12,8 +12,8 @@ print_separator() {
 }
 
 print_separator '='
-alias build="python3 ${PROJECT_PATH}/build.py"
-echo "use 'build' to run ${PROJECT_PATH}/build.py"
+alias knet="python3 ${PROJECT_PATH}/build.py"
+echo "use 'knet' to run ${PROJECT_PATH}/build.py"
 
 print_separator
 alias run="${PROJECT_PATH}/a.out"
@@ -28,3 +28,7 @@ print_separator
 alias ut="sh ${SCRIPT_PATH}/ut.sh"
 echo "use 'ut' to run ${SCRIPT_PATH}/ut.sh"
 ut help
+
+print_separator
+alias clean="unalias build run sdv ut; echo 'All aliases removed.'"
+echo "use 'clean' to remove all aliases"

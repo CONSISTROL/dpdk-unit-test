@@ -4,54 +4,47 @@ set -e
 
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"
 
+# 定义命令及其描述
+declare -A commands=(
+    [build]="开始构建项目"
+    [run]="运行项目"
+    [help]="显示此帮助信息"
+)
+
+# 定义简写命令
+declare -A short_commands=(
+    [b]="build"
+    [r]="run"
+    [h]="help"
+)
+
+# 输出可用选项和对应命令的帮助信息
 help() {
     echo "可用选项:"
-    echo "  build  开始构建项目"
-    echo "  test   开始测试项目"
-    echo "  run    运行项目"
-    echo "  help   显示此帮助信息"
+    for short in "${!short_commands[@]}"; do
+        cmd="${short_commands[$short]}"
+        echo "  $short | $cmd  ${commands[$cmd]}"
+    done
 }
 
-# 定义 build 函数
 build() {
     echo "开始构建..."
-    # 在这里添加构建命令
-    # 示例：
-    # make
 }
 
-# 定义 test 函数
-test() {
-    echo "开始测试..."
-    # 在这里添加测试命令
-    # 示例：
-    # ./run_tests.sh
-}
-
-# 定义 run 函数
 run() {
     echo "开始运行..."
-    # 在这里添加运行命令
-    # 示例：
-    # ./my_program
 }
 
-# 检查输入参数并调用相应的函数
-case "$1" in
-    h | help)
-        help
-        ;;
-    bd | build)
-        build
-        ;;
-    t | test)
-        test
-        ;;
-    r | run)
-        run
-        ;;
-    *)
-        echo "无效参数，请使用: build, test, 或 run"
-        exit 1
-        ;;
-esac
+cmd="$1"
+# 如果是简写形式，则转换
+if [[ -v short_commands[$cmd] ]]; then
+    cmd="${short_commands[$cmd]}"
+fi
+
+if [[ -v commands[$cmd] ]]; then
+    "$cmd"
+else
+    echo "无效参数: '$cmd'"
+    help
+    exit 1
+fi
